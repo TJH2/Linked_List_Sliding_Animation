@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Sliding LL</title>
+        <meta charset="UTF-8">
+        <style>
+            * {
+                margin: 0px;
+                padding: 0px;
+                box-sizing: border-box;
+                font-family: monospace;
+            }
+
+            header {
+                margin: 10px auto;
+                width: 1000px;
+                border: 2px black solid;
+                border-radius: 3px;
+                text-align: center;
+            }
+
+            main {
+                margin: auto;
+                width: 1000px;
+                overflow: hidden;
+                border: 2px black solid;
+                border-radius: 3px;
+            }
+
+            #container {
+                margin: auto;
+                width: 500px;
+                visibility: hidden;
+            }
+
+            #test {
+                font-size: 24px;
+                font-weight: bold;
+                text-align: center;
+            }
+
+            .forward {
+                animation: slideForward 5s 1;
+                animation-timing-function: linear;
+            }
+
+            .backward {
+                animation: slideBackward 5s 1;
+                animation-timing-function: linear;
+            }
+
+            @keyframes slideForward {
+                0% { transform: translateX(-150%); }
+                25% { transform: translateX(0%); }
+                40% { transform: translateX(-10%); }
+                50% { transform: translateX(0%); }
+                60% { transform: translateX(10%); }
+                75% { transform: translateX(0%); }
+                100% { transform: translateX(150%); }
+            }
+
+            @keyframes slideBackward {
+                from { transform: translateX(150%); }
+                to { transform: translateX(-150%); }
+                
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Linked List Slide Animation</h1>
+        </header>
+        <main>
+            <div id="container">
+            <p id="test">placeholder</p>
+            <div>
+        </main>
+        <script>
+            // User defined class node
+            class Node {
+                // constructor
+                constructor(test)
+                {
+                    this.test = test;
+                    this.next = null
+                    this.previous = null
+                }
+            }
+
+        // linkedlist class
+        class LinkedList {
+            constructor() {
+            this.head = null;
+            this.size = 0;
+            }
+ 
+            
+            add(test) {
+                // creates a new node
+                let node = new Node(test);
+ 
+                // to store current node
+                let current;
+ 
+                // if list is Empty add the
+                // element and make it head
+                if (this.head == null) {
+                    this.head = node;
+                }
+                else {
+                current = this.head;
+ 
+                    while (current.next) {
+                    current = current.next;
+                    }
+ 
+                    current.next = node;
+                    current.next.previous = current;
+                }
+                this.size++;
+            }
+
+            //Moving through LL
+            setHead(node) {this.head = node ;}
+
+        }
+
+        let root = new LinkedList();
+        let forward = true;
+
+        root.add("test 1");
+        root.add("test 2");
+        root.add("test 3");
+        root.add("test 4");
+        root.add("test 5");
+
+        document.getElementById("test").innerText = root.head.test; // sets test
+        direction(document.getElementById("container"), forward);
+        
+
+
+            
+    setInterval(function(){ // chamges from node to node displaying information in 4.1 second intervals
+
+            if(forward == true) {
+            
+                if(root.head.next != null) {
+                    root.head = root.head.next; 
+                }
+                else { 
+                    forward = false;
+                    root.head = root.head.previous;
+                }
+            }
+            else {
+
+                if(root.head.previous != null) {
+                    root.head = root.head.previous; 
+                }
+                else { 
+                    forward = true;
+                    root.head = root.head.next; 
+                }
+            }
+            document.getElementById("test").innerText = root.head.test; // sets test
+            direction(document.getElementById("container"), forward);
+    }, 5100);
+
+    function direction(element, forward) {
+        let direction = "";
+        
+        if(forward == true) {
+            direction = "forward";
+        } else {
+            direction = "backward";
+        }
+
+        element.style.visibility = "visible";
+        element.classList.add(direction);
+        element.addEventListener( "animationend",  function() {
+            element.style.visibility = "hidden"; 
+            element.classList.remove(direction);   
+        });
+
+    }
+  
+        </script>
+    </body>
+</html>
